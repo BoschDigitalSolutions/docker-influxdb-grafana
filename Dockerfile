@@ -8,6 +8,7 @@ ENV LANG C.UTF-8
 ENV INFLUXDB_VERSION=1.8.2
 ENV CHRONOGRAF_VERSION=1.8.6
 ENV GRAFANA_VERSION=7.2.0
+ENV TELEGRAF_VERSION=1.16.0-1
 
 # Grafana database type
 ENV GF_DATABASE_TYPE=sqlite3
@@ -57,7 +58,11 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" && \
     && wget https://dl.grafana.com/oss/release/grafana_${GRAFANA_VERSION}_${ARCH}.deb \
     && dpkg -i grafana_${GRAFANA_VERSION}_${ARCH}.deb \
     && rm grafana_${GRAFANA_VERSION}_${ARCH}.deb \
-    # Cleanup
+    # Install Telegraf
+    && wget https://dl.influxdata.com/telegraf/releases/telegraf_${TELEGRAF_VERSION}_${ARCH}.deb \
+    && dpkg -i telegraf_${TELEGRAF_VERSION}_${ARCH}.deb \
+    && rm telegraf_${TElEGRAF_VERSION}_${ARCH}.deb \
+  # Cleanup
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -70,6 +75,9 @@ COPY influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 
 # Configure Grafana
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
+
+# Configure Telegraf
+COPY telegraf/telegraf.cong /etc/telegraf/telegraf.conf
 
 COPY run.sh /run.sh
 RUN ["chmod", "+x", "/run.sh"]
