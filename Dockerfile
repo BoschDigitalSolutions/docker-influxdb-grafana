@@ -61,7 +61,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" && \
     # Install Telegraf
     && wget https://dl.influxdata.com/telegraf/releases/telegraf_${TELEGRAF_VERSION}_${ARCH}.deb \
     && dpkg -i telegraf_${TELEGRAF_VERSION}_${ARCH}.deb \
-    && rm telegraf_${TElEGRAF_VERSION}_${ARCH}.deb \
+    && rm telegraf_${TELEGRAF_VERSION}_${ARCH}.deb \
   # Cleanup
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -77,7 +77,7 @@ COPY influxdb/influxdb.conf /etc/influxdb/influxdb.conf
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 
 # Configure Telegraf
-COPY telegraf/telegraf.cong /etc/telegraf/telegraf.conf
+COPY telegraf/telegraf.conf /etc/telegraf/telegraf.conf
 
 COPY run.sh /run.sh
 RUN ["chmod", "+x", "/run.sh"]
